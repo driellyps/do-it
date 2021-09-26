@@ -13,7 +13,6 @@ interface Task {
 export function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskTitle, setNewTaskTitle] = useState('');
-  const [status, setStatus] = useState(false)
 
   function handleCreateNewTask() {
     if(!newTaskTitle) {
@@ -28,16 +27,19 @@ export function TaskList() {
     const newTask = {
       id: randomId(), 
       title: newTaskTitle,
-      isComplete: status
+      isComplete: false
     }
 
     setTasks([...tasks, newTask])
+    setNewTaskTitle('')
   }
 
   function handleToggleTaskCompletion(id: number) {
-    setStatus(!status)
-    return tasks.map(t => {
-      if (t.id === id) return t.isComplete = !status})
+    const editedTasks = tasks.map(t => t.id === id ? {
+      ...t,
+      isComplete: !t.isComplete
+    } : t)
+    setTasks(editedTasks)
   }
 
   function handleRemoveTask(id: number) {
